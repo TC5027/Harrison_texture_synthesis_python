@@ -29,5 +29,5 @@ etapes : le nombre d'étapes par lequel l'algorithme va passer avant de rendre l
 
 
 
-(entre parentheses valeurs que j'ai personnellement pu utilisées).
+(entre parentheses valeurs que j'ai personnellement pu utilisées).    
 Pour plus d'explications je renvoie à la lecture du document de monsieur Harrison.
