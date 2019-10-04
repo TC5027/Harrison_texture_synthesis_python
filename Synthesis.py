@@ -2,8 +2,8 @@
 from PIL import Image
 import os
 import numpy as np
-import matplotlib.pyplot as plt
-from random import shuffle
+from random import shuffle,randint
+import sys
 
 
 def metric(paterne,paterne_cible,dispersion):
@@ -120,9 +120,11 @@ def synthese(texture,N,M,dispersion,etapes):
             else:
                 """on est assuré d'avoir déja N positions synthétisés et on peut donc utiliser la méthode décrite par Harrison"""
                 N_plus_proches,N_candidats = localisation(position,nouveau,texture,origine_pixel,rempli_ou_non,N)
-                """faire les M_candidats aussi ... (A AJOUTER PLUS TARD DONC)"""
+                M_candidats = [(randint(0,a-1),randint(0,b-1)) for _ in range(M)]
+                NplusM_candidats = N_candidats + M_candidats
 
-                meilleur_candidat = choix(N_plus_proches,N_candidats,position,texture,nouveau,dispersion)
+                meilleur_candidat = choix(N_plus_proches,NplusM_candidats,position,texture,nouveau,dispersion)
+
 
                 nouveau[position] = texture[meilleur_candidat]
                 origine_pixel[position] = meilleur_candidat
@@ -153,19 +155,16 @@ def synthese(texture,N,M,dispersion,etapes):
     return(nouveau)
 
 
+entree = sys.argv[1]
+sortie = sys.argv[2]
+N,M,dispersion,etapes = [int(parametre) for parametre in sys.argv[3:]]
 
 
-
-texturepil = Image.open("inputs/texture3.jpg")
+texturepil = Image.open(entree)
 texture = np.asarray(texturepil)
 
-texture=texture
+image = synthese(texture,N,M,dispersion,etapes)
 
-image = synthese(texture,4,1,30,3)
-
-texture = np.uint8(texture)
 image=np.uint8(image)
-
-
 nouvelle_imgpil = Image.fromarray(image)
-nouvelle_imgpil.save("output3.jpg")
+nouvelle_imgpil.save(sortie)
