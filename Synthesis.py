@@ -6,11 +6,7 @@ import matplotlib.pyplot as plt
 from random import shuffle
 
 
-from Creation_texture import la_texture
-
-
 def metric(paterne,paterne_cible,dispersion):
-    """ABSOLUMENT URGENT DE VERIFIER CECI"""
     valeur = 0
     for couleur1,couleur2 in zip(paterne,paterne_cible):
         r1,g1,b1 = couleur1
@@ -80,19 +76,17 @@ def localisation(position,nouveau,texture,origine_pixel,rempli_ou_non,N):
             N_positions_proches.append((x+cran,y+cran))
         if x+cran<2*a and y-cran>=0 and rempli_ou_non[x+cran,y-cran]:
             N_positions_proches.append((x+cran,y-cran))
-        """QUEL ENFER CES IF"""
         cran +=1
     N_positions_proches = N_positions_proches[:N]
 
 
-    #N_plus_proches = list(nouveau[position] for position in N_positions_proches)
     N_plus_proches = N_positions_proches
 
     N_origines = list(origine_pixel[position] for position in N_positions_proches)
     """Gros doutes sur le dessous là"""
     N_candidats = list(((i + (x-q))%a,(j + (y-s))%b) for (q,s),(i,j) in zip(N_positions_proches,N_origines))
 
-    return(N_plus_proches,N_candidats) #essayer de penser à un test qui permettrait de vérifier ... je sais pas trop
+    return(N_plus_proches,N_candidats)
 
 
 def synthese(texture,N,M,dispersion,etapes):
@@ -126,7 +120,7 @@ def synthese(texture,N,M,dispersion,etapes):
             else:
                 """on est assuré d'avoir déja N positions synthétisés et on peut donc utiliser la méthode décrite par Harrison"""
                 N_plus_proches,N_candidats = localisation(position,nouveau,texture,origine_pixel,rempli_ou_non,N)
-                """faire les M_candidats aussi"""
+                """faire les M_candidats aussi ... (A AJOUTER PLUS TARD DONC)"""
 
                 meilleur_candidat = choix(N_plus_proches,N_candidats,position,texture,nouveau,dispersion)
 
@@ -162,7 +156,7 @@ def synthese(texture,N,M,dispersion,etapes):
 
 
 
-texturepil = Image.open("texture4.jpg")
+texturepil = Image.open("inputs/texture3.jpg")
 texture = np.asarray(texturepil)
 
 texture=texture
@@ -171,9 +165,7 @@ image = synthese(texture,4,1,30,3)
 
 texture = np.uint8(texture)
 image=np.uint8(image)
-texturepil = Image.fromarray(texture)
-texturepil.save("input.jpg")
 
 
 nouvelle_imgpil = Image.fromarray(image)
-nouvelle_imgpil.save("output.jpg")
+nouvelle_imgpil.save("output3.jpg")
